@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniPulse | Client Marketing & Development Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.35);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.6);
+    }
+    /* Status indicator pulse animation */
+    @keyframes subtle-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .status-pulse {
+      animation: subtle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    /* Print media optimization for Executive Reports */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #report-print-container, #report-print-container * {
+        visibility: visible;
+      }
+      #report-print-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 24px;
+        background: white !important;
+        color: black !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-md shadow-indigo-100">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
+            OmniPulse <span class="text-xs px-2 py-0.5 rounded-full font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">Marketing & Dev PM</span>
+          </span>
+          <p class="text-xs text-slate-500 hidden sm:block">Multi-client campaign tracking, SEO & Maps presence, and dev pipelines</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <button id="btn-export-report" onclick="openExecutiveReportModal()" class="inline-flex items-center px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition">
+          <svg class="w-4 h-4 mr-1.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Executive Report
+        </button>
+        <button id="btn-quick-meeting" onclick="openMeetingModal()" class="inline-flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition">
+          <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          Schedule Sync
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <aside class="lg:col-span-3 space-y-6">
+      <!-- Client Selector Card -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Client Portfolio</h2>
+          <button onclick="openClientModal()" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center">
+            <svg class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Client
+          </button>
+        </div>
+
+        <div id="clients-list" class="space-y-1.5">
+          <!-- Dynamic Clients populated here -->
+        </div>
+
+        <!-- Client meta quick info -->
+        <div id="client-quick-details" class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500 space-y-1">
+          <!-- Dynamic client contact info -->
+        </div>
+      </div>
+
+      <!-- Client's Projects Card -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Client Projects</h2>
+          <button onclick="openProjectModal()" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center">
+            <svg class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            New Project
+          </button>
+        </div>
+        <div id="projects-list" class="space-y-2">
+          <!-- Dynamic Projects list -->
+        </div>
+      </div>
+
+      <!-- Quick KPI targets overview sidebar widget -->
+      <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-2xl p-4 shadow-md">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-300">Campaign Health</span>
+          <span id="health-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Healthy</span>
+        </div>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-xs text-slate-300 mb-1">
+              <span>Overall Deliverables</span>
+              <span id="health-pct-label" class="font-bold text-white">0%</span>
+            </div>
+            <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+              <div id="health-progress-bar" class="bg-indigo-400 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-slate-700/60 grid grid-cols-2 gap-2 text-center text-xs">
+            <div class="p-2 rounded-lg bg-slate-800/60">
+              <span class="text-[10px] text-slate-400 block">Open Tasks</span>
+              <span id="health-open-tasks" class="font-bold text-base text-amber-400">0</span>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-800/60">
+              <span class="text-[10px] text-slate-400 block">Pending Reviews</span>
+              <span id="health-pending-reviews" class="font-bold text-base text-indigo-300">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="lg:col-span-9 space-y-6">
+
+      <!-- Active Project Banner & Header info -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span id="banner-client-name" class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">Apex Retail Co.</span>
+              <span id="banner-status-tag" class="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 status-pulse"></span>
+                In Progress
+              </span>
+            </div>
+            <h1 id="banner-project-title" class="text-2xl font-bold text-slate-900 mt-1">Full Website Replatform & Local Maps Push</h1>
+            <p id="banner-project-desc" class="text-sm text-slate-500 mt-1 max-w-2xl">Modern headless ecommerce revamp combined with multi-location Google Business Profile claiming, Apple Maps citations, and seasonal social marketing.</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <span class="text-xs text-slate-400 block">Target Launch Date</span>
+              <span id="banner-target-date" class="text-sm font-semibold text-slate-700">Nov 30, 2026</span>
+            </div>
+            <button onclick="openNewTaskModal()" class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition">
+              <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Deliverable
+            </button>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs for Project Views -->
+        <div class="flex border-b border-slate-200 mt-6 -mb-2 space-x-6 overflow-x-auto text-sm font-medium">
+          <button onclick="switchTab('deliverables')" id="tab-deliverables" class="tab-btn pb-3 text-indigo-600 border-b-2 border-indigo-600 font-semibold whitespace-nowrap">
+            Campaign & Dev Deliverables
+          </button>
+          <button onclick="switchTab('milestones')" id="tab-milestones" class="tab-btn pb-3 text-slate-500 hover:text-slate-700 border-b-2 border-transparent whitespace-nowrap">
+            Roadmap & Milestones
+          </button>
+          <button onclick="switchTab('metrics')" id="tab-metrics" class="tab-btn pb-3 text-slate-500 hover:text-slate-700 border-b-2 border-transparent whitespace-nowrap">
+            KPI & Target Achievements
+          </button>
+          <button onclick="switchTab('meetings')" id="tab-meetings" class="tab-btn pb-3 text-slate-500 hover:text-slate-700 border-b-2 border-transparent whitespace-nowrap">
+            Sync Meetings & Notes
+          </button>
+          <button onclick="switchTab('assets')" id="tab-assets" class="tab-btn pb-3 text-slate-500 hover:text-slate-700 border-b-2 border-transparent whitespace-nowrap">
+            Asset Review Pipeline
+          </button>
+        </div>
+      </div>
+
+      <div id="view-deliverables" class="tab-view space-y-6">
+        <!-- Filter bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-xs">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Track Filter:</span>
+            <select id="filter-category" onchange="renderDeliverables()" class="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:ring-indigo-500 focus:border-indigo-500">
+              <option value="ALL">All Tracks (Dev, SEO, Maps, Social)</option>
+              <option value="Website & Dev">Website & Dev</option>
+              <option value="Technical SEO & Analytics">Technical SEO & Analytics</option>
+              <option value="Google Business & Local Maps">Google Business & Local Maps</option>
+              <option value="Social Media & Funnels">Social Media & Funnels</option>
+            </select>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Status:</span>
+            <select id="filter-status" onchange="renderDeliverables()" class="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:ring-indigo-500 focus:border-indigo-500">
+              <option value="ALL">All Statuses</option>
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Client Review">Client Review</option>
+              <option value="Completed">Completed</option>
+              <option value="Blocked">Blocked</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Deliverables List Grid -->
+        <div id="deliverables-container" class="space-y-3">
+          <!-- Dynamic Deliverable rows -->
+        </div>
+      </div>
+
+      <div id="view-milestones" class="tab-view hidden space-y-6">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-lg">Execution Roadmap & Milestone Windows</h3>
+              <p class="text-xs text-slate-500">Visual progress of stages: Discovery, Dev Build, Local Presence & Launch</p>
+            </div>
+            <button onclick="openMilestoneModal()" class="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-semibold rounded-lg border border-indigo-200 transition">
+              + Add Phase
+            </button>
+          </div>
+          <div id="milestone-timeline-container" class="space-y-4 pt-2">
+            <!-- Dynamic milestones timeline bars -->
+          </div>
+        </div>
+      </div>
+
+      <div id="view-metrics" class="tab-view hidden space-y-6">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-lg">Target Milestones & KPI Tracking</h3>
+              <p class="text-xs text-slate-500">Measure actual marketing reach and performance against agreed client targets</p>
+            </div>
+            <button onclick="openKpiModal()" class="text-xs px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-semibold rounded-lg border border-indigo-200 transition">
+              + New Target KPI
+            </button>
+          </div>
+          <div id="metrics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Dynamic KPI Cards -->
+          </div>
+        </div>
+      </div>
+
+      <div id="view-meetings" class="tab-view hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Upcoming Meetings Column -->
+          <div class="lg:col-span-5 bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="font-bold text-slate-900">Scheduled Client Syncs</h3>
+                <button onclick="openMeetingModal()" class="text-xs text-indigo-600 font-semibold hover:underline">+ Schedule</button>
+              </div>
+              <div id="meetings-list" class="space-y-3">
+                <!-- Dynamic meetings -->
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-center">
+              <span class="text-xs text-slate-400">All meetings are automatically included in the Executive Status Brief.</span>
+            </div>
+          </div>
+
+          <!-- Discussions / Minutes Column -->
+          <div class="lg:col-span-7 bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+            <h3 class="font-bold text-slate-900 mb-2">Discussion Feed & Meeting Notes</h3>
+            <div class="mb-4">
+              <textarea id="new-note-text" placeholder="Add an update, meeting minutes, client feedback, or blocker..." class="w-full text-xs p-3 border border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 h-20 resize-none"></textarea>
+              <div class="flex justify-between items-center mt-2">
+                <span class="text-[11px] text-slate-400">Notes are visible to the client in the shared health report</span>
+                <button onclick="postProjectNote()" class="text-xs px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition shadow-xs">
+                  Post Update
+                </button>
+              </div>
+            </div>
+            <div id="notes-container" class="space-y-3 max-h-[360px] overflow-y-auto pr-1">
+              <!-- Dynamic discussion notes -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-assets" class="tab-view hidden space-y-6">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-lg">Creative & Technical Asset Pipeline</h3>
+              <p class="text-xs text-slate-500">Logos, Map photo geotags, Ad creatives, Wireframes, and Copy decks for approval</p>
+            </div>
+            <button onclick="openUploadAssetModal()" class="text-xs px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition inline-flex items-center">
+              <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              Upload / Link Asset
+            </button>
+          </div>
+
+          <!-- Asset Grid -->
+          <div id="assets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Dynamic Asset Cards -->
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="modal-report" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 sm:p-6 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Executive Project Status Report</h2>
+          <p class="text-xs text-slate-500">Live, printable client health summary</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="copyReportText()" class="px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg border border-indigo-200 transition flex items-center">
+            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            Copy Summary
+          </button>
+          <button onclick="window.print()" class="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition flex items-center">
+            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Print / PDF
+          </button>
+          <button onclick="closeModal('modal-report')" class="text-slate-400 hover:text-slate-600 p-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="report-print-container" class="p-6 overflow-y-auto space-y-6 text-slate-800 text-sm">
+        <!-- Rendered Report Content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Modal -->
+  <div id="modal-client" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-slate-900">Add New Client</h3>
+        <button onclick="closeModal('modal-client')" class="text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+      <form onsubmit="handleCreateClient(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Company / Business Name</label>
+          <input type="text" id="input-client-name" required placeholder="e.g. Skyline Logistics" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Industry</label>
+          <input type="text" id="input-client-industry" required placeholder="e.g. Retail, Health & Wellness, SaaS" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Primary Contact Email</label>
+          <input type="email" id="input-client-email" required placeholder="marketing@client.com" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="flex justify-end space-x-2 pt-2">
+          <button type="button" onclick="closeModal('modal-client')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Create Client</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Project Modal -->
+  <div id="modal-project" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-slate-900">Add Project for Client</h3>
+        <button onclick="closeModal('modal-project')" class="text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+      <form onsubmit="handleCreateProject(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Project Name</label>
+          <input type="text" id="input-project-name" required placeholder="e.g. SEO Overhaul & Maps Optimization" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Project Scope / Summary</label>
+          <textarea id="input-project-desc" rows="3" required placeholder="Key deliverables, launch objectives..." class="w-full border border-slate-300 rounded-lg p-2.5"></textarea>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Target Completion Date</label>
+          <input type="date" id="input-project-date" required class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="flex justify-end space-x-2 pt-2">
+          <button type="button" onclick="closeModal('modal-project')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Create Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Deliverable Modal -->
+  <div id="modal-task" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-slate-900">Add Campaign or Dev Deliverable</h3>
+        <button onclick="closeModal('modal-task')" class="text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+      <form onsubmit="handleCreateTask(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Deliverable Title</label>
+          <input type="text" id="input-task-title" required placeholder="e.g. Verify Google Business Profile PIN postcard" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Track / Category</label>
+            <select id="input-task-track" class="w-full border border-slate-300 rounded-lg p-2.5">
+              <option value="Website & Dev">Website & Dev</option>
+              <option value="Technical SEO & Analytics">Technical SEO & Analytics</option>
+              <option value="Google Business & Local Maps">Google Business & Local Maps</option>
+              <option value="Social Media & Funnels">Social Media & Funnels</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Assigned Lead</label>
+            <input type="text" id="input-task-assignee" required placeholder="e.g. Jordan V." class="w-full border border-slate-300 rounded-lg p-2.5">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Status</label>
+            <select id="input-task-status" class="w-full border border-slate-300 rounded-lg p-2.5">
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Client Review">Client Review</option>
+              <option value="Completed">Completed</option>
+              <option value="Blocked">Blocked</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Due Date</label>
+            <input type="date" id="input-task-due" required class="w-full border border-slate-300 rounded-lg p-2.5">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Notes / Specific Deliverable Link</label>
+          <input type="text" id="input-task-notes" placeholder="e.g. Map link, GA4 property ID, ad campaign group" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="flex justify-end space-x-2 pt-3">
+          <button type="button" onclick="closeModal('modal-task')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Save Deliverable</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Meeting Modal -->
+  <div id="modal-meeting" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-slate-900">Schedule Client Sync Meeting</h3>
+        <button onclick="closeModal('modal-meeting')" class="text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+      <form onsubmit="handleCreateMeeting(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Meeting Title</label>
+          <input type="text" id="input-meeting-title" required placeholder="e.g. Bi-Weekly SEO & Maps Audit Review" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Date</label>
+            <input type="date" id="input-meeting-date" required class="w-full border border-slate-300 rounded-lg p-2.5">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Time</label>
+            <input type="time" id="input-meeting-time" required class="w-full border border-slate-300 rounded-lg p-2.5">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Location or Video Link</label>
+          <input type="text" id="input-meeting-link" required placeholder="Google Meet, Zoom, or On-site" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Attendees / Agenda</label>
+          <textarea id="input-meeting-agenda" rows="2" placeholder="Key talking points: Social creative preview, Google maps verification status..." class="w-full border border-slate-300 rounded-lg p-2.5"></textarea>
+        </div>
+        <div class="flex justify-end space-x-2 pt-2">
+          <button type="button" onclick="closeModal('modal-meeting')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Schedule Meeting</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Asset Modal -->
+  <div id="modal-asset" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-slate-900">Upload & Review Asset</h3>
+        <button onclick="closeModal('modal-asset')" class="text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+      <form onsubmit="handleCreateAsset(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Asset Name / Title</label>
+          <input type="text" id="input-asset-name" required placeholder="e.g. Q4 Instagram Story Creatives v2" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Asset Type</label>
+            <select id="input-asset-type" class="w-full border border-slate-300 rounded-lg p-2.5">
+              <option value="Social Ad Creative">Social Ad Creative</option>
+              <option value="Logo / Branding Pack">Logo / Branding Pack</option>
+              <option value="Maps Geotagged Photos">Maps Geotagged Photos</option>
+              <option value="SEO Copy Document">SEO Copy Document</option>
+              <option value="Website Wireframe">Website Wireframe</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Initial Status</label>
+            <select id="input-asset-status" class="w-full border border-slate-300 rounded-lg p-2.5">
+              <option value="Pending Approval">Pending Approval</option>
+              <option value="Revision Requested">Revision Requested</option>
+              <option value="Approved">Approved</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">File Size / Simulation Note</label>
+          <input type="text" id="input-asset-size" placeholder="e.g. 14.8 MB (Figma / ZIP)" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="flex justify-end space-x-2 pt-2">
+          <button type="button" onclick="closeModal('modal-asset')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Upload Asset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- KPI Modal -->
+  <div id="modal-kpi" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-slate-900">Add Target KPI</h3>
+        <button onclick="closeModal('modal-kpi')" class="text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+      <form onsubmit="handleCreateKpi(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Metric Name</label>
+          <input type="text" id="input-kpi-name" required placeholder="e.g. Google Maps Direction Requests" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Current Value</label>
+            <input type="number" id="input-kpi-current" required placeholder="320" class="w-full border border-slate-300 rounded-lg p-2.5">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Target Target</label>
+            <input type="number" id="input-kpi-target" required placeholder="500" class="w-full border border-slate-300 rounded-lg p-2.5">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Unit / Format</label>
+          <input type="text" id="input-kpi-unit" placeholder="e.g. searches, leads, % conversion, sessions" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="flex justify-end space-x-2 pt-2">
+          <button type="button" onclick="closeModal('modal-kpi')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Save Metric</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Milestone Modal -->
+  <div id="modal-milestone" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-slate-900">Add Roadmap Milestone Phase</h3>
+        <button onclick="closeModal('modal-milestone')" class="text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+      <form onsubmit="handleCreateMilestone(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Phase Title</label>
+          <input type="text" id="input-milestone-title" required placeholder="e.g. Phase 3: Omnichannel Paid Ads & Geo-Push" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Estimated Completion %</label>
+          <input type="number" min="0" max="100" id="input-milestone-pct" required placeholder="45" class="w-full border border-slate-300 rounded-lg p-2.5">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Target Window</label>
+            <input type="text" id="input-milestone-window" required placeholder="e.g. Weeks 5 - 8" class="w-full border border-slate-300 rounded-lg p-2.5">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Status</label>
+            <select id="input-milestone-status" class="w-full border border-slate-300 rounded-lg p-2.5">
+              <option value="In Progress">In Progress</option>
+              <option value="Upcoming">Upcoming</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex justify-end space-x-2 pt-2">
+          <button type="button" onclick="closeModal('modal-milestone')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg">Save Milestone</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification element -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 text-xs">
+    <span id="toast-message">Action successful</span>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'omnipulse_pm_data_v2';
+
+    // Comprehensive realistic initial state
+    const defaultData = {
+      activeClientId: 'client-1',
+      activeProjectId: 'proj-101',
+      clients: [
+        {
+          id: 'client-1',
+          name: 'Apex Retail Co.',
+          industry: 'Lifestyle & Omnichannel Retail',
+          contactEmail: 'marketing@apexretail.io',
+          primaryDomain: 'apexretail.com'
+        },
+        {
+          id: 'client-2',
+          name: 'Coastal Wellness Studio',
+          industry: 'Health & Boutique Fitness',
+          contactEmail: 'director@coastalwellness.com',
+          primaryDomain: 'coastalwellness.com'
+        },
+        {
+          id: 'client-3',
+          name: 'Urban Horizon Tech',
+          industry: 'B2B Enterprise SaaS',
+          contactEmail: 'growth@urbanhorizon.ai',
+          primaryDomain: 'urbanhorizon.ai'
+        }
+      ],
+      projects: [
+        {
+          id: 'proj-101',
+          clientId: 'client-1',
+          name: 'Full Website Replatform & Local Maps Push',
+          description: 'High-speed headless commerce rebuild with technical SEO, Google Business 5-location listing sync, and TikTok/Meta ad funnels.',
+          targetLaunchDate: '2026-11-20',
+          status: 'In Progress',
+          tasks: [
+            {
+              id: 't-1',
+              title: 'GA4, Google Tag Manager & Server-Side Tracking Setup',
+              category: 'Technical SEO & Analytics',
+              assignee: 'Marcus L.',
+              status: 'Completed',
+              dueDate: '2026-10-10',
+              notes: 'Enhanced ecommerce checkout events verified via GTM debugger.'
+            },
+            {
+              id: 't-2',
+              title: 'Claim & Verify 5 Google Business Profiles + Apple Maps',
+              category: 'Google Business & Local Maps',
+              assignee: 'Sarah T.',
+              status: 'In Progress',
+              dueDate: '2026-10-24',
+              notes: 'Awaiting 2 postcard PIN confirmations for suburban stores.'
+            },
+            {
+              id: 't-3',
+              title: 'Core Web Vitals & Structured Data Schema (LocalBusiness & Product)',
+              category: 'Website & Dev',
+              assignee: 'Elena R.',
+              status: 'Client Review',
+              dueDate: '2026-10-28',
+              notes: 'Mobile LCP reduced to 1.8s. Rich snippet testing passing.'
+            },
+            {
+              id: 't-4',
+              title: 'Q4 Omnichannel Launch: Meta & TikTok Creative Video Assets',
+              category: 'Social Media & Funnels',
+              assignee: 'Darius K.',
+              status: 'In Progress',
+              dueDate: '2026-11-05',
+              notes: '9 vertical cuts rendered with localized UTM parameters.'
+            },
+            {
+              id: 't-5',
+              title: 'Local Citations: Yelp, YellowPages, Bing Places, and TripAdvisor',
+              category: 'Google Business & Local Maps',
+              assignee: 'Sarah T.',
+              status: 'Not Started',
+              dueDate: '2026-11-12',
+              notes: 'NAP (Name, Address, Phone) consistency audit prepared.'
+            }
+          ],
+          milestones: [
+            {
+              id: 'm-1',
+              title: 'Phase 1: Architecture, Design Systems & Baseline SEO Audit',
+              window: 'Weeks 1 - 3',
+              progress: 100,
+              status: 'Completed'
+            },
+            {
+              id: 'm-2',
+              title: 'Phase 2: Store Dev & Google Maps Multi-Unit Verification',
+              window: 'Weeks 4 - 6',
+              progress: 75,
+              status: 'In Progress'
+            },
+            {
+              id: 'm-3',
+              title: 'Phase 3: Omnichannel Paid Ad Launch & Holiday Traffic Scale',
+              window: 'Weeks 7 - 9',
+              progress: 20,
+              status: 'Upcoming'
+            }
+          ],
+          kpis: [
+            { id: 'k-1', name: 'Google Maps Local Discovery Searches', current: 18400, target: 25000, unit: 'impressions' },
+            { id: 'k-2', name: 'Organic Search Traffic Growth', current: 34, target: 50, unit: '% lift' },
+            { id: 'k-3', name: 'Store Visit Direction Clicks', current: 1420, target: 2000, unit: 'clicks' },
+            { id: 'k-4', name: 'Average Mobile PageSpeed Score', current: 92, target: 95, unit: '/100' }
+          ],
+          meetings: [
+            {
+              id: 'mt-1',
+              title: 'Bi-Weekly Growth Sync & Maps Rollout',
+              date: '2026-10-18',
+              time: '14:00',
+              location: 'Google Meet (meet.google.com/xyz-pm)',
+              agenda: 'Review store postcard verification, Core Web Vitals report, and paid campaign flighting.'
+            },
+            {
+              id: 'mt-2',
+              title: 'Creative Review: TikTok & Instagram Reels',
+              date: '2026-10-25',
+              time: '11:00',
+              location: 'Zoom Conference ID #982-110',
+              agenda: 'Final sign-off on 9 holiday video ads and influencer UTM tracking links.'
+            }
+          ],
+          notes: [
+            {
+              id: 'n-1',
+              author: 'Elena R. (Tech Lead)',
+              date: 'Oct 04, 2026',
+              text: 'Schema.org JSON-LD LocalBusiness data is now live on staging. Verified opening hours and geo-coordinates.'
+            },
+            {
+              id: 'n-2',
+              author: 'Marcus L. (Analytics)',
+              date: 'Oct 02, 2026',
+              text: 'GA4 custom exploration dashboard created for client CMO. Filtered out internal store IP addresses.'
+            }
+          ],
+          assets: [
+            {
+              id: 'a-1',
+              name: 'Apex_Q4_Campaign_Reels_Pack_v2.mp4',
+              type: 'Social Ad Creative',
+              size: '42.8 MB',
+              status: 'Approved',
+              uploaded: 'Oct 02, 2026'
+            },
+            {
+              id: 'a-2',
+              name: 'Google_Business_Storefront_Photos_Geotagged.zip',
+              type: 'Maps Geotagged Photos',
+              size: '18.4 MB',
+              status: 'Approved',
+              uploaded: 'Oct 03, 2026'
+            },
+            {
+              id: 'a-3',
+              name: 'Ecommerce_Product_Schema_Spec.pdf',
+              type: 'SEO Copy Document',
+              size: '3.1 MB',
+              status: 'Pending Approval',
+              uploaded: 'Oct 04, 2026'
+            }
+          ]
+        },
+        {
+          id: 'proj-102',
+          clientId: 'client-1',
+          name: 'Social Brand Awareness & Funnel',
+          description: 'Influencer activation across Instagram and YouTube shorts focused on new flagship store openings.',
+          targetLaunchDate: '2026-12-01',
+          status: 'Planning',
+          tasks: [
+            {
+              id: 't-201',
+              title: 'Influencer Outreach & Contract Signatures',
+              category: 'Social Media & Funnels',
+              assignee: 'Darius K.',
+              status: 'In Progress',
+              dueDate: '2026-10-20',
+              notes: '12 out of 15 creators confirmed.'
+            }
+          ],
+          milestones: [
+            {
+              id: 'm-201',
+              title: 'Creator Onboarding & Creative Briefs',
+              window: 'Weeks 1 - 2',
+              progress: 60,
+              status: 'In Progress'
+            }
+          ],
+          kpis: [
+            { id: 'k-201', name: 'Social Reach Impressions', current: 45000, target: 120000, unit: 'reach' }
+          ],
+          meetings: [],
+          notes: [
+            {
+              id: 'n-201',
+              author: 'Darius K.',
+              date: 'Oct 01, 2026',
+              text: 'Brief approved by Apex marketing lead. Outreach commencing.'
+            }
+          ],
+          assets: []
+        },
+        {
+          id: 'proj-201',
+          clientId: 'client-2',
+          name: 'Local Studio SEO & Membership Acquisition Funnel',
+          description: 'Boosting studio membership signups through localized search engine rank, Google Map pack prominence, and retargeting ads.',
+          targetLaunchDate: '2026-11-15',
+          status: 'In Progress',
+          tasks: [
+            {
+              id: 't-301',
+              title: 'Complete Google Business Profile Optimization & 360 Virtual Tour',
+              category: 'Google Business & Local Maps',
+              assignee: 'Sarah T.',
+              status: 'In Progress',
+              dueDate: '2026-10-19',
+              notes: 'Photographer scheduled for interior studio photoshoot.'
+            },
+            {
+              id: 't-302',
+              title: 'Local Fitness Class Schema & Landing Page Redesign',
+              category: 'Website & Dev',
+              assignee: 'Elena R.',
+              status: 'Completed',
+              dueDate: '2026-10-02',
+              notes: 'Page conversion rate raised by 3.2% in initial tests.'
+            }
+          ],
+          milestones: [
+            {
+              id: 'm-301',
+              title: 'Map Pack Domination & Lead Funnel Launch',
+              window: 'Weeks 1 - 4',
+              progress: 80,
+              status: 'In Progress'
+            }
+          ],
+          kpis: [
+            { id: 'k-301', name: 'Local Map Pack #1-3 Rank Rate', current: 78, target: 90, unit: '% keywords' },
+            { id: 'k-302', name: 'Monthly Trial Class Bookings', current: 94, target: 150, unit: 'signups' }
+          ],
+          meetings: [],
+          notes: [],
+          assets: []
+        }
+      ]
+    };
+
+    // State variable initialized with localStorage or fallback
+    let appState = (() => {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch (e) {
+        console.error('Error reading localStorage', e);
+      }
+      return defaultData;
+    })();
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.error('Error saving state', e);
+      }
+    }
+
+    function getActiveClient() {
+      return appState.clients.find(c => c.id === appState.activeClientId) || appState.clients[0];
+    }
+
+    function getClientProjects(clientId) {
+      return appState.projects.filter(p => p.clientId === clientId);
+    }
+
+    function getActiveProject() {
+      let proj = appState.projects.find(p => p.id === appState.activeProjectId);
+      if (!proj) {
+        const clientProjs = getClientProjects(appState.activeClientId);
+        proj = clientProjs[0] || appState.projects[0];
+        if (proj) appState.activeProjectId = proj.id;
+      }
+      return proj;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-message');
+      msg.textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 2600);
+    }
+
+    // Modal controllers
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+    function openClientModal() { openModal('modal-client'); }
+    function openProjectModal() { openModal('modal-project'); }
+    function openNewTaskModal() { openModal('modal-task'); }
+    function openMeetingModal() { openModal('modal-meeting'); }
+    function openUploadAssetModal() { openModal('modal-asset'); }
+    function openKpiModal() { openModal('modal-kpi'); }
+    function openMilestoneModal() { openModal('modal-milestone'); }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-indigo-600', 'border-indigo-600', 'font-semibold');
+        btn.classList.add('text-slate-500', 'border-transparent');
+      });
+
+      const selectedView = document.getElementById(`view-${tabId}`);
+      const selectedTabBtn = document.getElementById(`tab-${tabId}`);
+      if (selectedView) selectedView.classList.remove('hidden');
+      if (selectedTabBtn) {
+        selectedTabBtn.classList.add('text-indigo-600', 'border-indigo-600', 'font-semibold');
+        selectedTabBtn.classList.remove('text-slate-500', 'border-transparent');
+      }
+    }
+
+    function renderSidebar() {
+      const clientsList = document.getElementById('clients-list');
+      const projectsList = document.getElementById('projects-list');
+      const activeClient = getActiveClient();
+      const clientDetails = document.getElementById('client-quick-details');
+
+      // Populate Clients
+      clientsList.innerHTML = '';
+      appState.clients.forEach(client => {
+        const isActive = client.id === appState.activeClientId;
+        const button = document.createElement('button');
+        button.onclick = () => selectClient(client.id);
+        button.className = `w-full text-left px-3 py-2.5 rounded-xl transition flex items-center justify-between text-xs font-medium ${
+          isActive 
+            ? 'bg-indigo-50/90 text-indigo-900 border border-indigo-200/80 shadow-xs' 
+            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+        }`;
+        button.innerHTML = `
+          <div class="flex items-center space-x-2 truncate">
+            <span class="w-2.5 h-2.5 rounded-full ${isActive ? 'bg-indigo-600 ring-2 ring-indigo-200' : 'bg-slate-300'}"></span>
+            <span class="truncate font-semibold">${client.name}</span>
+          </div>
+          <span class="text-[10px] text-slate-400 bg-white/70 px-1.5 py-0.5 rounded border border-slate-200/50">${getClientProjects(client.id).length}p</span>
+        `;
+        clientsList.appendChild(button);
+      });
+
+      // Quick info
+      clientDetails.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-slate-600">Industry:</span>
+          <span class="text-slate-900 font-semibold truncate ml-2">${activeClient.industry}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-slate-600">Contact:</span>
+          <span class="text-indigo-600 truncate ml-2 font-mono text-[11px]">${activeClient.contactEmail}</span>
+        </div>
+      `;
+
+      // Populate Projects for active client
+      const currentProjects = getClientProjects(activeClient.id);
+      projectsList.innerHTML = '';
+      if (currentProjects.length === 0) {
+        projectsList.innerHTML = `<p class="text-xs text-slate-400 italic py-2">No projects yet for this client.</p>`;
+      } else {
+        currentProjects.forEach(proj => {
+          const isActiveProj = proj.id === appState.activeProjectId;
+          const projBtn = document.createElement('button');
+          projBtn.onclick = () => selectProject(proj.id);
+          projBtn.className = `w-full text-left p-3 rounded-xl transition border text-xs ${
+            isActiveProj
+              ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+              : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200/80'
+          }`;
+          projBtn.innerHTML = `
+            <div class="font-semibold text-sm truncate ${isActiveProj ? 'text-white' : 'text-slate-800'}">${proj.name}</div>
+            <div class="flex items-center justify-between mt-2 text-[11px] ${isActiveProj ? 'text-slate-300' : 'text-slate-500'}">
+              <span>${(proj.tasks || []).length} Deliverables</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] ${
+                proj.status === 'Completed' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-indigo-500/20 text-indigo-300'
+              }">${proj.status}</span>
+            </div>
+          `;
+          projectsList.appendChild(projBtn);
+        });
+      }
+
+      updateHealthWidget();
+    }
+
+    function selectClient(clientId) {
+      appState.activeClientId = clientId;
+      const projects = getClientProjects(clientId);
+      if (projects.length > 0) {
+        appState.activeProjectId = projects[0].id;
+      } else {
+        appState.activeProjectId = null;
+      }
+      saveState();
+      renderAll();
+      showToast('Switched client');
+    }
+
+    function selectProject(projectId) {
+      appState.activeProjectId = projectId;
+      saveState();
+      renderAll();
+    }
+
+    function renderProjectHeader() {
+      const client = getActiveClient();
+      const project = getActiveProject();
+
+      const clientNameEl = document.getElementById('banner-client-name');
+      const projectTitleEl = document.getElementById('banner-project-title');
+      const projectDescEl = document.getElementById('banner-project-desc');
+      const projectDateEl = document.getElementById('banner-target-date');
+      const statusTagEl = document.getElementById('banner-status-tag');
+
+      if (!project) {
+        clientNameEl.textContent = client.name;
+        projectTitleEl.textContent = 'No Active Project Selected';
+        projectDescEl.textContent = 'Click "New Project" in the sidebar to add a campaign or development workflow.';
+        projectDateEl.textContent = 'N/A';
+        statusTagEl.className = 'text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full';
+        statusTagEl.textContent = 'Idle';
+        return;
+      }
+
+      clientNameEl.textContent = client.name;
+      projectTitleEl.textContent = project.name;
+      projectDescEl.textContent = project.description;
+      projectDateEl.textContent = project.targetLaunchDate;
+      statusTagEl.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 status-pulse"></span> ${project.status}`;
+    }
+
+    function updateHealthWidget() {
+      const project = getActiveProject();
+      const pctLabel = document.getElementById('health-pct-label');
+      const progressBar = document.getElementById('health-progress-bar');
+      const openTasksEl = document.getElementById('health-open-tasks');
+      const pendingReviewsEl = document.getElementById('health-pending-reviews');
+      const healthBadge = document.getElementById('health-badge');
+
+      if (!project || !project.tasks || project.tasks.length === 0) {
+        pctLabel.textContent = '0%';
+        progressBar.style.width = '0%';
+        openTasksEl.textContent = '0';
+        pendingReviewsEl.textContent = '0';
+        return;
+      }
+
+      const totalTasks = project.tasks.length;
+      const completedTasks = project.tasks.filter(t => t.status === 'Completed').length;
+      const openTasks = totalTasks - completedTasks;
+      const pct = Math.round((completedTasks / totalTasks) * 100);
+
+      const pendingReviews = (project.assets || []).filter(a => a.status === 'Pending Approval').length;
+
+      pctLabel.textContent = `${pct}%`;
+      progressBar.style.width = `${pct}%`;
+      openTasksEl.textContent = openTasks;
+      pendingReviewsEl.textContent = pendingReviews;
+
+      if (pct > 70) {
+        healthBadge.textContent = 'On Track';
+        healthBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+      } else if (pct > 30) {
+        healthBadge.textContent = 'Active Sprint';
+        healthBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
+      } else {
+        healthBadge.textContent = 'Ramping Up';
+        healthBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+      }
+    }
+
+    function renderDeliverables() {
+      const container = document.getElementById('deliverables-container');
+      const project = getActiveProject();
+      if (!project) {
+        container.innerHTML = `<div class="bg-white p-8 rounded-xl text-center text-slate-400">Please create or select a project.</div>`;
+        return;
+      }
+
+      const catFilter = document.getElementById('filter-category').value;
+      const statusFilter = document.getElementById('filter-status').value;
+
+      let tasks = project.tasks || [];
+
+      if (catFilter !== 'ALL') {
+        tasks = tasks.filter(t => t.category === catFilter);
+      }
+      if (statusFilter !== 'ALL') {
+        tasks = tasks.filter(t => t.status === statusFilter);
+      }
+
+      if (tasks.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-2xl p-10 text-center border border-dashed border-slate-300">
+            <svg class="w-10 h-10 mx-auto text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <p class="text-sm font-medium text-slate-600">No deliverables found matching filters</p>
+            <p class="text-xs text-slate-400 mt-1">Try switching filters or add a new technical or campaign deliverable above.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      tasks.forEach(task => {
+        const isComplete = task.status === 'Completed';
+
+        // Badges config
+        let categoryColor = 'bg-blue-50 text-blue-700 border-blue-200';
+        if (task.category.includes('Maps') || task.category.includes('Google Business')) {
+          categoryColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        } else if (task.category.includes('Social')) {
+          categoryColor = 'bg-purple-50 text-purple-700 border-purple-200';
+        } else if (task.category.includes('SEO')) {
+          categoryColor = 'bg-amber-50 text-amber-700 border-amber-200';
+        }
+
+        let statusClass = 'bg-slate-100 text-slate-700';
+        if (task.status === 'In Progress') statusClass = 'bg-indigo-50 text-indigo-700 border border-indigo-200';
+        if (task.status === 'Client Review') statusClass = 'bg-amber-50 text-amber-700 border border-amber-200';
+        if (task.status === 'Completed') statusClass = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+        if (task.status === 'Blocked') statusClass = 'bg-rose-50 text-rose-700 border border-rose-200';
+
+        const row = document.createElement('div');
+        row.className = `bg-white p-4 rounded-xl border border-slate-200 transition hover:shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 ${isComplete ? 'opacity-75' : ''}`;
+        row.innerHTML = `
+          <div class="flex items-start space-x-3 flex-1 min-w-0">
+            <button onclick="toggleTaskComplete('${task.id}')" class="mt-0.5 w-5 h-5 rounded flex items-center justify-center border transition ${
+              isComplete ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-slate-300 hover:border-indigo-500 text-transparent'
+            }">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+              </svg>
+            </button>
+            <div class="flex-1 min-w-0">
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border ${categoryColor}">${task.category}</span>
+                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full ${statusClass}">${task.status}</span>
+                <span class="text-xs text-slate-400">Due: <strong class="text-slate-600">${task.dueDate}</strong></span>
+                <span class="text-xs text-slate-400">&bull; Lead: <strong class="text-slate-600">${task.assignee}</strong></span>
+              </div>
+              <h4 class="text-sm font-semibold text-slate-900 ${isComplete ? 'line-through text-slate-400' : ''}">${task.title}</h4>
+              ${task.notes ? `<p class="text-xs text-slate-500 mt-1 flex items-center gap-1"><svg class="w-3.5 h-3.5 text-slate-400 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> ${task.notes}</p>` : ''}
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2 self-end md:self-center">
+            <select onchange="updateTaskStatus('${task.id}', this.value)" class="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 focus:ring-indigo-500">
+              <option value="Not Started" ${task.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
+              <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+              <option value="Client Review" ${task.status === 'Client Review' ? 'selected' : ''}>Client Review</option>
+              <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
+              <option value="Blocked" ${task.status === 'Blocked' ? 'selected' : ''}>Blocked</option>
+            </select>
+            <button onclick="deleteTask('${task.id}')" class="text-slate-400 hover:text-rose-600 p-1.5 rounded hover:bg-slate-100 transition" title="Delete deliverable">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function toggleTaskComplete(taskId) {
+      const project = getActiveProject();
+      if (!project) return;
+      const task = project.tasks.find(t => t.id === taskId);
+      if (task) {
+        task.status = task.status === 'Completed' ? 'In Progress' : 'Completed';
+        saveState();
+        renderDeliverables();
+        updateHealthWidget();
+        showToast(task.status === 'Completed' ? 'Marked complete!' : 'Re-opened deliverable');
+      }
+    }
+
+    function updateTaskStatus(taskId, newStatus) {
+      const project = getActiveProject();
+      if (!project) return;
+      const task = project.tasks.find(t => t.id === taskId);
+      if (task) {
+        task.status = newStatus;
+        saveState();
+        renderDeliverables();
+        updateHealthWidget();
+        showToast(`Status updated to ${newStatus}`);
+      }
+    }
+
+    function deleteTask(taskId) {
+      const project = getActiveProject();
+      if (!project) return;
+      project.tasks = project.tasks.filter(t => t.id !== taskId);
+      saveState();
+      renderDeliverables();
+      updateHealthWidget();
+      showToast('Deliverable removed');
+    }
+
+    function renderMilestones() {
+      const container = document.getElementById('milestone-timeline-container');
+      const project = getActiveProject();
+      if (!project) return;
+
+      const milestones = project.milestones || [];
+      if (milestones.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 py-4 italic">No milestone phases configured. Click "+ Add Phase" to structure this project's roadmap.</p>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      milestones.forEach(m => {
+        const item = document.createElement('div');
+        item.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition';
+        item.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <span class="text-xs font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">${m.window}</span>
+              <h4 class="font-bold text-sm text-slate-900 mt-1">${m.title}</h4>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-xs font-bold text-slate-700">${m.progress}%</span>
+              <button onclick="deleteMilestone('${m.id}')" class="text-slate-400 hover:text-rose-500">&times;</button>
+            </div>
+          </div>
+          <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+            <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: ${m.progress}%"></div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function deleteMilestone(id) {
+      const proj = getActiveProject();
+      if (!proj) return;
+      proj.milestones = proj.milestones.filter(m => m.id !== id);
+      saveState();
+      renderMilestones();
+      showToast('Phase removed');
+    }
+
+    function renderMetrics() {
+      const container = document.getElementById('metrics-grid');
+      const project = getActiveProject();
+      if (!project) return;
+
+      const kpis = project.kpis || [];
+      if (kpis.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 py-4 italic col-span-3">No KPI targets set. Add goal metrics like organic visits, Google Maps direction clicks, or conversions.</p>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      kpis.forEach(kpi => {
+        const pct = Math.min(100, Math.round((kpi.current / kpi.target) * 100));
+        const card = document.createElement('div');
+        card.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/40 relative group';
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-2">
+            <h4 class="text-xs font-semibold text-slate-600 uppercase tracking-wider">${kpi.name}</h4>
+            <button onclick="deleteKpi('${kpi.id}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-rose-500 text-xs transition">&times;</button>
+          </div>
+          <div class="flex items-baseline space-x-2 my-2">
+            <span class="text-2xl font-extrabold text-slate-900">${Number(kpi.current).toLocaleString()}</span>
+            <span class="text-xs text-slate-400">/ ${Number(kpi.target).toLocaleString()} ${kpi.unit}</span>
+          </div>
+          <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden mb-1">
+            <div class="bg-emerald-500 h-2 rounded-full" style="width: ${pct}%"></div>
+          </div>
+          <div class="flex justify-between text-[11px] text-slate-500">
+            <span>Progress: ${pct}%</span>
+            <span class="${pct >= 100 ? 'text-emerald-600 font-bold' : 'text-slate-400'}">${pct >= 100 ? 'Target Achieved 🎉' : 'In Flight'}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function deleteKpi(id) {
+      const proj = getActiveProject();
+      if (!proj) return;
+      proj.kpis = proj.kpis.filter(k => k.id !== id);
+      saveState();
+      renderMetrics();
+      showToast('Target KPI deleted');
+    }
+
+    function renderMeetingsAndNotes() {
+      const project = getActiveProject();
+      if (!project) return;
+
+      // Render meetings
+      const meetingsList = document.getElementById('meetings-list');
+      const meetings = project.meetings || [];
+
+      if (meetings.length === 0) {
+        meetingsList.innerHTML = `<p class="text-xs text-slate-400 py-3 italic">No upcoming sync meetings scheduled.</p>`;
+      } else {
+        meetingsList.innerHTML = '';
+        meetings.forEach(mt => {
+          const item = document.createElement('div');
+          item.className = 'p-3 rounded-xl border border-slate-200 bg-slate-50/70 text-xs space-y-1 relative';
+          item.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900 text-sm">${mt.title}</span>
+              <button onclick="deleteMeeting('${mt.id}')" class="text-slate-400 hover:text-rose-500">&times;</button>
+            </div>
+            <div class="flex items-center text-indigo-700 font-medium space-x-2">
+              <span>📅 ${mt.date}</span>
+              <span>⏰ ${mt.time}</span>
+            </div>
+            <p class="text-slate-600"><strong class="text-slate-700">Link:</strong> ${mt.location}</p>
+            ${mt.agenda ? `<p class="text-slate-500 pt-1 border-t border-slate-200/60 mt-1">${mt.agenda}</p>` : ''}
+          `;
+          meetingsList.appendChild(item);
+        });
+      }
+
+      // Render notes
+      const notesContainer = document.getElementById('notes-container');
+      const notes = project.notes || [];
+
+      if (notes.length === 0) {
+        notesContainer.innerHTML = `<p class="text-xs text-slate-400 py-3 italic">No discussion updates yet. Share an update or meeting minutes above.</p>`;
+      } else {
+        notesContainer.innerHTML = '';
+        notes.forEach(note => {
+          const n = document.createElement('div');
+          n.className = 'p-3 rounded-xl border border-slate-100 bg-slate-50 text-xs space-y-1';
+          n.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-800">${note.author}</span>
+              <span class="text-[10px] text-slate-400">${note.date}</span>
+            </div>
+            <p class="text-slate-600 leading-relaxed">${note.text}</p>
+          `;
+          notesContainer.appendChild(n);
+        });
+      }
+    }
+
+    function postProjectNote() {
+      const input = document.getElementById('new-note-text');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const project = getActiveProject();
+      if (!project) return;
+
+      if (!project.notes) project.notes = [];
+      project.notes.unshift({
+        id: 'n-' + Date.now(),
+        author: 'Project Manager (You)',
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+        text: text
+      });
+
+      input.value = '';
+      saveState();
+      renderMeetingsAndNotes();
+      showToast('Discussion note added');
+    }
+
+    function deleteMeeting(id) {
+      const proj = getActiveProject();
+      if (!proj) return;
+      proj.meetings = proj.meetings.filter(m => m.id !== id);
+      saveState();
+      renderMeetingsAndNotes();
+      showToast('Meeting cancelled');
+    }
+
+    function renderAssets() {
+      const container = document.getElementById('assets-grid');
+      const project = getActiveProject();
+      if (!project) return;
+
+      const assets = project.assets || [];
+      if (assets.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 py-4 italic col-span-3">No assets in pipeline. Upload creatives, Maps photos, or SEO specs for client approval.</p>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      assets.forEach(asset => {
+        let badgeColor = 'bg-amber-50 text-amber-700 border-amber-200';
+        if (asset.status === 'Approved') badgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        if (asset.status === 'Revision Requested') badgeColor = 'bg-rose-50 text-rose-700 border-rose-200';
+
+        const card = document.createElement('div');
+        card.className = 'p-4 rounded-xl border border-slate-200 bg-white shadow-xs flex flex-col justify-between';
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] uppercase font-semibold text-slate-400">${asset.type}</span>
+              <button onclick="deleteAsset('${asset.id}')" class="text-slate-400 hover:text-rose-500 text-xs">&times;</button>
+            </div>
+            <h4 class="font-bold text-xs text-slate-900 line-clamp-1 mb-1">${asset.name}</h4>
+            <div class="flex items-center text-[11px] text-slate-400 space-x-2 mb-3">
+              <span>${asset.size}</span>
+              <span>&bull;</span>
+              <span>${asset.uploaded}</span>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${badgeColor}">${asset.status}</span>
+            <div class="flex items-center space-x-1">
+              <button onclick="cycleAssetStatus('${asset.id}')" class="px-2 py-1 text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded font-medium transition" title="Toggle review status">
+                Status
+              </button>
+              <button onclick="showToast('Simulated asset download initiated')" class="p-1 text-slate-400 hover:text-indigo-600 transition" title="Download Asset">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function cycleAssetStatus(id) {
+      const proj = getActiveProject();
+      if (!proj) return;
+      const asset = proj.assets.find(a => a.id === id);
+      if (!asset) return;
+
+      const cycle = ['Pending Approval', 'Approved', 'Revision Requested'];
+      const nextIdx = (cycle.indexOf(asset.status) + 1) % cycle.length;
+      asset.status = cycle[nextIdx];
+
+      saveState();
+      renderAssets();
+      updateHealthWidget();
+      showToast(`Asset marked: ${asset.status}`);
+    }
+
+    function deleteAsset(id) {
+      const proj = getActiveProject();
+      if (!proj) return;
+      proj.assets = proj.assets.filter(a => a.id !== id);
+      saveState();
+      renderAssets();
+      updateHealthWidget();
+      showToast('Asset removed');
+    }
+
+    function handleCreateClient(e) {
+      e.preventDefault();
+      const name = document.getElementById('input-client-name').value.trim();
+      const industry = document.getElementById('input-client-industry').value.trim();
+      const contactEmail = document.getElementById('input-client-email').value.trim();
+
+      const newId = 'client-' + Date.now();
+      const newClient = { id: newId, name, industry, contactEmail };
+
+      appState.clients.push(newClient);
+      appState.activeClientId = newId;
+
+      // Create a default initial project
+      const initialProject = {
+        id: 'proj-' + Date.now(),
+        clientId: newId,
+        name: 'Brand Discovery & Marketing Infrastructure',
+        description: 'Baseline Google maps & analytics implementation with conversion tracking.',
+        targetLaunchDate: '2026-12-15',
+        status: 'In Progress',
+        tasks: [
+          {
+            id: 't-' + Date.now(),
+            title: 'Verify Google Business & Maps Listing Details',
+            category: 'Google Business & Local Maps',
+            assignee: 'Project Lead',
+            status: 'In Progress',
+            dueDate: '2026-11-01',
+            notes: 'Submit physical store / HQ coordinates'
+          }
+        ],
+        milestones: [
+          { id: 'm-' + Date.now(), title: 'Phase 1: Setup & Indexing', window: 'Weeks 1-2', progress: 40, status: 'In Progress' }
+        ],
+        kpis: [
+          { id: 'k-' + Date.now(), name: 'Google Maps Search Impressions', current: 0, target: 5000, unit: 'views' }
+        ],
+        meetings: [],
+        notes: [],
+        assets: []
+      };
+      appState.projects.push(initialProject);
+      appState.activeProjectId = initialProject.id;
+
+      saveState();
+      closeModal('modal-client');
+      e.target.reset();
+      renderAll();
+      showToast('New Client added successfully');
+    }
+
+    function handleCreateProject(e) {
+      e.preventDefault();
+      const name = document.getElementById('input-project-name').value.trim();
+      const description = document.getElementById('input-project-desc').value.trim();
+      const targetLaunchDate = document.getElementById('input-project-date').value;
+
+      const newProj = {
+        id: 'proj-' + Date.now(),
+        clientId: appState.activeClientId,
+        name,
+        description,
+        targetLaunchDate,
+        status: 'In Progress',
+        tasks: [],
+        milestones: [],
+        kpis: [],
+        meetings: [],
+        notes: [],
+        assets: []
+      };
+
+      appState.projects.push(newProj);
+      appState.activeProjectId = newProj.id;
+      saveState();
+      closeModal('modal-project');
+      e.target.reset();
+      renderAll();
+      showToast('New project created');
+    }
+
+    function handleCreateTask(e) {
+      e.preventDefault();
+      const proj = getActiveProject();
+      if (!proj) return;
+
+      const title = document.getElementById('input-task-title').value.trim();
+      const category = document.getElementById('input-task-track').value;
+      const assignee = document.getElementById('input-task-assignee').value.trim();
+      const status = document.getElementById('input-task-status').value;
+      const dueDate = document.getElementById('input-task-due').value;
+      const notes = document.getElementById('input-task-notes').value.trim();
+
+      if (!proj.tasks) proj.tasks = [];
+      proj.tasks.push({
+        id: 't-' + Date.now(),
+        title,
+        category,
+        assignee,
+        status,
+        dueDate,
+        notes
+      });
+
+      saveState();
+      closeModal('modal-task');
+      e.target.reset();
+      renderDeliverables();
+      updateHealthWidget();
+      showToast('Deliverable added');
+    }
+
+    function handleCreateMeeting(e) {
+      e.preventDefault();
+      const proj = getActiveProject();
+      if (!proj) return;
+
+      const title = document.getElementById('input-meeting-title').value.trim();
+      const date = document.getElementById('input-meeting-date').value;
+      const time = document.getElementById('input-meeting-time').value;
+      const location = document.getElementById('input-meeting-link').value.trim();
+      const agenda = document.getElementById('input-meeting-agenda').value.trim();
+
+      if (!proj.meetings) proj.meetings = [];
+      proj.meetings.push({
+        id: 'mt-' + Date.now(),
+        title,
+        date,
+        time,
+        location,
+        agenda
+      });
+
+      saveState();
+      closeModal('modal-meeting');
+      e.target.reset();
+      renderMeetingsAndNotes();
+      showToast('Meeting scheduled');
+    }
+
+    function handleCreateAsset(e) {
+      e.preventDefault();
+      const proj = getActiveProject();
+      if (!proj) return;
+
+      const name = document.getElementById('input-asset-name').value.trim();
+      const type = document.getElementById('input-asset-type').value;
+      const status = document.getElementById('input-asset-status').value;
+      let size = document.getElementById('input-asset-size').value.trim();
+      if (!size) size = '8.5 MB (Cloud link)';
+
+      if (!proj.assets) proj.assets = [];
+      proj.assets.push({
+        id: 'a-' + Date.now(),
+        name,
+        type,
+        status,
+        size,
+        uploaded: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+      });
+
+      saveState();
+      closeModal('modal-asset');
+      e.target.reset();
+      renderAssets();
+      updateHealthWidget();
+      showToast('Asset uploaded');
+    }
+
+    function handleCreateKpi(e) {
+      e.preventDefault();
+      const proj = getActiveProject();
+      if (!proj) return;
+
+      const name = document.getElementById('input-kpi-name').value.trim();
+      const current = Number(document.getElementById('input-kpi-current').value);
+      const target = Number(document.getElementById('input-kpi-target').value);
+      const unit = document.getElementById('input-kpi-unit').value.trim() || 'units';
+
+      if (!proj.kpis) proj.kpis = [];
+      proj.kpis.push({
+        id: 'k-' + Date.now(),
+        name,
+        current,
+        target,
+        unit
+      });
+
+      saveState();
+      closeModal('modal-kpi');
+      e.target.reset();
+      renderMetrics();
+      showToast('Target KPI added');
+    }
+
+    function handleCreateMilestone(e) {
+      e.preventDefault();
+      const proj = getActiveProject();
+      if (!proj) return;
+
+      const title = document.getElementById('input-milestone-title').value.trim();
+      const progress = Number(document.getElementById('input-milestone-pct').value);
+      const windowVal = document.getElementById('input-milestone-window').value.trim();
+      const status = document.getElementById('input-milestone-status').value;
+
+      if (!proj.milestones) proj.milestones = [];
+      proj.milestones.push({
+        id: 'm-' + Date.now(),
+        title,
+        progress,
+        window: windowVal,
+        status
+      });
+
+      saveState();
+      closeModal('modal-milestone');
+      e.target.reset();
+      renderMilestones();
+      showToast('Milestone Phase saved');
+    }
+
+    function openExecutiveReportModal() {
+      const client = getActiveClient();
+      const proj = getActiveProject();
+      if (!proj) {
+        showToast('No active project to report on');
+        return;
+      }
+
+      const tasks = proj.tasks || [];
+      const completed = tasks.filter(t => t.status === 'Completed').length;
+      const completionRate = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
+      const blockers = tasks.filter(t => t.status === 'Blocked');
+      const inProgress = tasks.filter(t => t.status === 'In Progress');
+
+      const reportContainer = document.getElementById('report-print-container');
+      reportContainer.innerHTML = `
+        <div class="border-b border-slate-200 pb-4 flex justify-between items-start">
+          <div>
+            <span class="text-xs uppercase font-bold tracking-wider text-indigo-600">${client.name} &bull; Client Status Report</span>
+            <h1 class="text-2xl font-black text-slate-900 mt-1">${proj.name}</h1>
+            <p class="text-xs text-slate-500 mt-1">${proj.description}</p>
+          </div>
+          <div class="text-right">
+            <span class="text-xs text-slate-400 block">Report Generated</span>
+            <span class="text-xs font-semibold text-slate-800">${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+            <span class="text-[11px] block mt-1 text-indigo-600 font-medium">Target Launch: ${proj.targetLaunchDate}</span>
+          </div>
+        </div>
+
+        <!-- Metric KPI Summary Section -->
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Project Health & Progress</h3>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="text-[11px] text-slate-500 block">Deliverables Completed</span>
+              <span class="text-xl font-extrabold text-slate-900">${completed} / ${tasks.length} (${completionRate}%)</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="text-[11px] text-slate-500 block">Active Deliverables</span>
+              <span class="text-xl font-extrabold text-indigo-600">${inProgress.length}</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="text-[11px] text-slate-500 block">Reported Blockers</span>
+              <span class="text-xl font-extrabold ${blockers.length > 0 ? 'text-rose-600' : 'text-emerald-600'}">${blockers.length}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google Business, Maps & SEO Track status -->
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Deliverables by Marketing Track</h3>
+          <div class="space-y-2">
+            ${tasks.map(t => `
+              <div class="flex items-center justify-between p-2.5 rounded-lg border border-slate-100 bg-slate-50/60 text-xs">
+                <div class="flex items-center space-x-2">
+                  <span class="font-bold text-slate-800">${t.title}</span>
+                  <span class="text-[10px] text-slate-400">(${t.category})</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span class="text-slate-500">Lead: ${t.assignee}</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
+                    t.status === 'Completed' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'
+                  }">${t.status}</span>
+                </div>
+              </div>
+            `).join('') || '<p class="text-xs text-slate-400">No deliverables tracked.</p>'}
+          </div>
+        </div>
+
+        <!-- Key Metrics & Local Maps Achievements -->
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Key Target Achievements</h3>
+          <div class="grid grid-cols-2 gap-3">
+            ${(proj.kpis || []).map(k => `
+              <div class="p-3 rounded-lg border border-slate-200 bg-white">
+                <div class="flex justify-between text-xs font-semibold text-slate-700">
+                  <span>${k.name}</span>
+                  <span>${Number(k.current).toLocaleString()} / ${Number(k.target).toLocaleString()} ${k.unit}</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-1.5 mt-2">
+                  <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${Math.min(100, Math.round((k.current / k.target) * 100))}%"></div>
+                </div>
+              </div>
+            `).join('') || '<p class="text-xs text-slate-400 col-span-2">No KPIs specified.</p>'}
+          </div>
+        </div>
+
+        <!-- Upcoming Syncs -->
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Upcoming Sync Meetings</h3>
+          <div class="space-y-1.5 text-xs text-slate-600">
+            ${(proj.meetings || []).map(m => `
+              <div class="p-2 border border-slate-100 rounded bg-slate-50 flex justify-between">
+                <span><strong>${m.title}</strong> &bull; ${m.date} at ${m.time}</span>
+                <span class="text-indigo-600">${m.location}</span>
+              </div>
+            `).join('') || '<p class="text-xs text-slate-400 italic">No sync meetings scheduled.</p>'}
+          </div>
+        </div>
+      `;
+
+      openModal('modal-report');
+    }
+
+    function copyReportText() {
+      const proj = getActiveProject();
+      const client = getActiveClient();
+      if (!proj) return;
+
+      const tasks = proj.tasks || [];
+      const completed = tasks.filter(t => t.status === 'Completed').length;
+      const text = `EXECUTIVE HEALTH REPORT
+Client: ${client.name}
+Project: ${proj.name}
+Target Launch: ${proj.targetLaunchDate}
+Progress: ${completed} / ${tasks.length} Deliverables Completed (${tasks.length ? Math.round((completed/tasks.length)*100) : 0}%)
+Recent Highlights: ${tasks.slice(0, 3).map(t => `${t.title} [${t.status}]`).join('; ')}
+Report generated via OmniPulse Marketing & Dev Suite`;
+
+      const dummy = document.createElement('textarea');
+      dummy.value = text;
+      document.body.appendChild(dummy);
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+
+      showToast('Summary copied to clipboard!');
+    }
+
+    function renderAll() {
+      renderSidebar();
+      renderProjectHeader();
+      renderDeliverables();
+      renderMilestones();
+      renderMetrics();
+      renderMeetingsAndNotes();
+      renderAssets();
+    }
+
+    // Mount on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAll();
+    });
+  </script>
+</body>
+</html>
